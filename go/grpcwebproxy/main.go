@@ -53,7 +53,7 @@ func main() {
 		WriteTimeout: *flagHttpMaxWriteTimeout,
 		ReadTimeout:  *flagHttpMaxReadTimeout,
 		Handler: http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
-			wrappedGrpc.ServeHTTP(resp, req)
+			http.DefaultServeMux.ServeHTTP(resp, req)
 		}),
 	}
 	http.Handle("/metrics", promhttp.Handler())
