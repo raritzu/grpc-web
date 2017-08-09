@@ -99,6 +99,7 @@ func buildGrpcProxyServer(logger *logrus.Entry) *grpc.Server {
 	return grpc.NewServer(
 		// grpc-web doesn't support client-side streaming of chunks, so allow for large single message sizes.
 		grpc.MaxRecvMsgSize(64*1024*1024),
+		grpc.MaxSendMsgSize(64*1024*1024),
 		grpc.CustomCodec(proxy.Codec()), // needed for proxy to function.
 		grpc.UnknownServiceHandler(proxy.TransparentHandler(director)),
 		grpc_middleware.WithUnaryServerChain(
