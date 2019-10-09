@@ -92,8 +92,13 @@ func buildGrpcProxyServer(logger *logrus.Entry) *grpc.Server {
 
 	// gRPC proxy logic.
 	backendConn := dialBackendOrFail()
-	director := func(ctx context.Context, fullMethodName string) (*grpc.ClientConn, error) {
-		return backendConn, nil
+	director := func(ctx context.Context, fullMethodName string) (context.Context, *grpc.ClientConn, error) {
+		md, _ := metadata.FromIncomingContext(ctx)
+        outCtx, _ := context.WithCancel(ctx)
+        mdCopy := md.Copy()
+        delete(mdCopy, "user-agent")
+        outCtx = metadata.NewOutgoingContext(outCtx, mdCopy)
+        return outCtx, backendConn, nil
 	}
 	// Server with logging and monitoring enabled.
 	return grpc.NewServer(
