@@ -44,6 +44,7 @@ func dialBackendOrFail() *grpc.ClientConn {
 	opt := []grpc.DialOption{}
 	opt = append(opt, grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(64 * 1024 * 1024)))
 	opt = append(opt, grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(64 * 1024 * 1024)))
+	opt = append(opt, grpc.WithTimeout(300 * time.Second))
 	opt = append(opt, grpc.WithCodec(proxy.Codec()))
 	if *flagBackendIsUsingTls {
 		opt = append(opt, grpc.WithTransportCredentials(credentials.NewTLS(buildBackendTlsOrFail())))
