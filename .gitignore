@@ -167,3 +167,5 @@ ENV/
 .ropeproject
 
 node_modules
+
+test/
